@@ -179,7 +179,7 @@ tr:hover td { background: #f9fafb; }
 
 
 <!-- FIREBASE SETUP MODAL -->
-<div class="modal-overlay" id="setupModal">
+<div class="modal-overlay" id="setupModal" style="display:none">
   <div class="modal">
     <h2>🔥 Firebase 설정</h2>
     <p>실시간 공유를 위해 Firebase 연결이 필요해요. 아래 순서대로 진행해주세요.</p>
@@ -613,6 +613,20 @@ function exportCSV() {
 }
 
 
+
+// ===========================
+// Firebase 설정 (직접 입력)
+// ===========================
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyBYY4SBjwC3VPy3gf-zZ63uDElDo6M74sI",
+  authDomain: "mvt-fu.firebaseapp.com",
+  databaseURL: "https://mvt-fu-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "mvt-fu",
+  storageBucket: "mvt-fu.firebasestorage.app",
+  messagingSenderId: "1059623206763",
+  appId: "1:1059623206763:web:5a1efe8ce04f420b43162e"
+};
+
 // ===========================
 // 비밀번호 설정 (여기서 변경 가능)
 // ===========================
@@ -642,17 +656,14 @@ function logout() {
 function initApp() {
   renderTable();
   updateStats();
-  const savedConfig = localStorage.getItem('fbConfig');
-  if (savedConfig) {
-    try {
-      if (!firebase.apps.length) firebase.initializeApp(JSON.parse(savedConfig));
-      db = firebase.database();
-      document.getElementById('setupModal').style.display = 'none';
-      document.getElementById('liveStatus').textContent = '실시간 연결됨';
-      startListening();
-    } catch(e) {
-      console.error('Firebase 연결 오류:', e);
-    }
+  try {
+    if (!firebase.apps.length) firebase.initializeApp(FIREBASE_CONFIG);
+    db = firebase.database();
+    document.getElementById('liveStatus').textContent = '실시간 연결됨';
+    startListening();
+  } catch(e) {
+    console.error('Firebase 연결 오류:', e);
+    document.getElementById('liveStatus').textContent = '연결 오류';
   }
 }
 
