@@ -131,11 +131,13 @@ tr:hover td { background: #f9fafb; }
 /* LOGIN SCREEN */
 .login-screen {
   position: fixed; inset: 0; background: linear-gradient(135deg, #1a56db 0%, #0e9f6e 100%);
-  display: flex; align-items: center; justify-content: center; z-index: 999;
+  display: flex; align-items: flex-start; justify-content: center; z-index: 999;
+  overflow-y: auto; padding: 40px 20px;
 }
 .login-box {
-  background: #fff; border-radius: 16px; padding: 40px 36px;
-  width: 360px; box-shadow: 0 20px 60px rgba(0,0,0,.2); text-align: center;
+  background: #fff; border-radius: 16px; padding: 36px 28px;
+  width: 100%; max-width: 360px; box-shadow: 0 20px 60px rgba(0,0,0,.2); text-align: center;
+  margin: auto;
 }
 .login-logo { font-size: 36px; margin-bottom: 8px; }
 .login-title { font-size: 20px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
@@ -740,20 +742,17 @@ const FIREBASE_CONFIG = {
 const PASSWORD = '2026';
 
 function checkLogin() {
-  const input = document.getElementById('pwInput').value;
+  const input = document.getElementById('pwInput').value.trim();
   if (input === PASSWORD) {
-    sessionStorage.setItem('auth', '1');
     document.getElementById('loginScreen').style.display = 'none';
     initApp();
   } else {
     document.getElementById('loginError').classList.add('show');
     document.getElementById('pwInput').value = '';
-    document.getElementById('pwInput').focus();
   }
 }
 
 function logout() {
-  sessionStorage.removeItem('auth');
   location.reload();
 }
 
@@ -774,12 +773,9 @@ function initApp() {
   }
 }
 
-// 페이지 로드 시 인증 확인
+// 페이지 로드 시 로그인 화면 표시 (새로고침시 항상 로그인)
 window.onload = function() {
-  if (sessionStorage.getItem('auth') === '1') {
-    document.getElementById('loginScreen').style.display = 'none';
-    initApp();
-  }
+  document.getElementById('loginScreen').style.display = 'flex';
 };
 
 </script>
